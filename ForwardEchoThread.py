@@ -1,4 +1,6 @@
 import threading
+import json
+import echomessage
 
 
 class ForwardEchoThread(threading.Thread):
@@ -17,15 +19,21 @@ class ForwardEchoThread(threading.Thread):
 
     def run(self):
         print('Running forward/echo thread...')
-        print('Message to forward:', self.data)
+        print('parsing message...')
+        parsed_message = self.parse_echo_message(self.data)
+        print(parsed_message)
 
-    def parse_echo_message(self):
+    def parse_echo_message(self, data):
         """
         after an echo_message is received, determine if it should be forwarded to another
         router or sent back to our client
         :return:
         """
-        pass
+        msg = echomessage.EchoMessage('a', 'b', 'message')
+        jsonText = json.dumps(msg.__dict__)
+        #print ('Json Encoding: '+jsonText)
+        return jsonText
+
 
     def compute_shortest_path(self, OVERLAY_NETWORK):
         self.OVERLAY_NETWORK = OVERLAY_NETWORK

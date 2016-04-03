@@ -16,7 +16,7 @@ class ForwardEchoListener(threading.Thread):
             forward_echo_THREAD = ForwardEchoThread.ForwardEchoThread\
                 (forward_echo_data, forward_echo_address, self.forward_echo_socket)
             forward_echo_THREAD.start()
-            forward_echo_THREAD.join()
+            #forward_echo_THREAD.join()
 
 
 

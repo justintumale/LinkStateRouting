@@ -16,4 +16,4 @@ class LinkStateListener(threading.Thread):
             LMReceiverThread = LinkMessageReceive.LinkMessageReceive\
                 (link_message_data, link_message_address, self.LM_receive_socket)
             LMReceiverThread.run()
-            LMReceiverThread.join()
+            #LMReceiverThread.join()
