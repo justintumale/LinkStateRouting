@@ -1,6 +1,7 @@
 import socket
 import forward_echo_thread
-import threading
+import ForwardEchoListener
+import LinkStateListener
 
 class LSRouter:
     host = ''
@@ -31,13 +32,13 @@ class LSRouter:
 
 
     def run(self):
+        '''run the listeners to handle concurrent sending/receiving of messages'''
         print('Running router...')
-        while True:
-            #LMdata, LMaddress = self.LM_receive_socket.recv(1024)
-            forward_echo_data, forward_echo_address = self.forward_echo_socket.recvfrom(1024)
-            forward_echo_THREAD = forward_echo_thread.ForwardEchoThread(forward_echo_data, forward_echo_address, self.forward_echo_socket)
-            forward_echo_THREAD.start()
-            forward_echo_THREAD.join()
+        FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket)
+        FEListener.start()
+        LMListener = LinkStateListener.LinkStateListener()
+        LMListener.start()
+
 
 
 def Main():
