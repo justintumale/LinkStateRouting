@@ -1,7 +1,7 @@
 import socket
-import forward_echo_thread
 import ForwardEchoListener
 import LinkStateListener
+import LinkMessageBroadcast
 
 class LSRouter:
     host = ''
@@ -36,8 +36,12 @@ class LSRouter:
         print('Running router...')
         FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket)
         FEListener.start()
-        LMListener = LinkStateListener.LinkStateListener()
+        LMListener = LinkStateListener.LinkStateListener(self.LM_receive_socket)
         LMListener.start()
+        Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast()
+        Broadcaster.start()
+
+
 
 
 

@@ -1,5 +1,6 @@
 import socket
 
+
 class EchoClient:
     host = ''
     port = ''
