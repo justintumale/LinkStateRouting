@@ -130,16 +130,24 @@ class LSRouter:
     def run(self):
         '''run the listeners to handle concurrent sending/receiving of messages'''
         print('Running router...')
-        FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket)
-        FEListener.start()
+
         LMListener = LinkStateListener.LinkStateListener(self.LM_receive_socket)
         LMListener.start()
+
+
+        FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket)
+        FEListener.start()
+
         Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast()
         Broadcaster.start()
 
-        FEListener.join()
         LMListener.join()
+        FEListener.join()
         Broadcaster.join()
+
+    def updateGraph(self, thread, graph):
+        '''updates the Graph according to the latest link state message'''
+        pass
 
 
 
