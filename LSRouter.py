@@ -137,6 +137,10 @@ class LSRouter:
         Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast()
         Broadcaster.start()
 
+        FEListener.join()
+        LMListener.join()
+        Broadcaster.join()
+
 
 
 
