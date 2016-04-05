@@ -1,4 +1,6 @@
 import socket
+import echomessage
+import json
 
 
 class EchoClient:
@@ -13,7 +15,7 @@ class EchoClient:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self.host, self.port))
 
-        self.router = (self.host, 50021) #router port
+        self.router = (self.host, 10063) #router port
 
     def send_echo(self):
         '''Sends an echo message to the LSRouter'''
@@ -24,10 +26,22 @@ class EchoClient:
         pass
 
     def run(self):
+        print("First enter the message.  Then enter the recipient's node name.")
+        print("To quit, type 'quit'.")
         message = input('->')
+        recipient = input('to node: ')
+
+        echo_message = echomessage.EchoMessage('fjt14188', recipient, message)
+        json_echo_message = json.dumps(echo_message.__dict__)
+
         while message is not 'quit':
-            self.socket.sendto(message.encode('utf-8'), self.router)
+            self.socket.sendto(json_echo_message.encode('utf-8'), self.router)  #send a message to Router's 50021 port
             message = input('->')
+            recipient = input('to node: ')
+            echo_message = echomessage.EchoMessage('fjt14188', recipient, message)
+            json_echo_message = json.dumps(echo_message.__dict__)
+
+        self.socket.close()
 
 
 def Main():

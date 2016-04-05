@@ -13,31 +13,59 @@ class ForwardEchoThread(threading.Thread):
 
     def __init__(self, data, address, socket):
         threading.Thread.__init__(self)
-        self.data = data.decode('utf-8')
+        raw_data = data.decode('utf-8')
+        self.data = json.loads(raw_data)
         self.receiveAddress = address
         self.socket = socket
 
     def run(self):
         print('Running forward/echo thread...')
         print('parsing message...')
-        parsed_message = self.parse_echo_message(self.data)
-        print(parsed_message)
+        from_node, to_node, message = self.parse_data(self.data)
+        validation = self.validate(to_node)
 
-    def parse_echo_message(self, data):
+        if validation is False:                 #if the node is not valid
+            print("This node does not exist")
+            return
+        else:
+            path = self.compute_shortest_path(from_node, to_node)
+
+        if path == 0:
+            # if the node is addressed to you, send it back to your client
+            print('From', from_node, 'to', to_node, ':', message)
+        else:
+            print('this message was not addressed to you')
+            pass
+
+
+    def parse_data(self, data):
         """
-        after an echo_message is received, determine if it should be forwarded to another
-        router or sent back to our client
-        :return:
+        Convert the json message to a dictionary
+        :return: the dictionary
         """
-        msg = echomessage.EchoMessage('a', 'b', 'message')
-        jsonText = json.dumps(msg.__dict__)
-        #print ('Json Encoding: '+jsonText)
-        return jsonText
+        #print(data)
+        #data = json.loads(data)
+        from_node = data['from_node']
+        to_node = data['to_node']
+        msg = data['msg']
+
+        return ''.join(from_node.strip()), ''.join(to_node.strip()), ''.join(msg)
+
+    def validate(self, to_node):
+        #TODO check if node exists
+        #TODO check if there is a path to the node
+        if 1 == 2:
+            return False
+        else:
+            return True
 
 
-    def compute_shortest_path(self, OVERLAY_NETWORK):
-        self.OVERLAY_NETWORK = OVERLAY_NETWORK
-        pass
+    def compute_shortest_path(self, from_node, to_node):
+        self.OVERLAY_NETWORK = self.OVERLAY_NETWORK
+        if to_node == 'fjt14188':
+            return 0
+        else:
+            return True
 
     def echo_reply(self):
         '''If the message received is addressed to our Client, send it to the Client.

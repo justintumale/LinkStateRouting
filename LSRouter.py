@@ -111,11 +111,11 @@ class LSRouter:
     def __init__(self):
         self.host = "127.0.0.1"
 
-        self.LM_receive_port = 50020
+        self.LM_receive_port = 10062
         self.LM_receive_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.LM_receive_socket.bind((self.host, self.LM_receive_port))
 
-        self.forward_echo_port = 50021
+        self.forward_echo_port = 10063
         self.forward_echo_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.forward_echo_socket.bind((self.host, self.forward_echo_port))
 
@@ -144,6 +144,11 @@ class LSRouter:
         LMListener.join()
         FEListener.join()
         Broadcaster.join()
+
+        self.LM_receive_socket.close()
+        self.forward_echo_socket.close()
+
+
 
     def updateGraph(self, thread_overlay_graph ):
         '''updates the Graph according to the latest link state message'''
