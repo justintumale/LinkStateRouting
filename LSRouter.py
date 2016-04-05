@@ -107,6 +107,8 @@ class LSRouter:
                     'byang9'	: [25520,	25521],
                     'dilawarz'	: [25620,	25621]}
 
+    LINKS = ['dilawarz', 'byang9', 'mwong9', 'wilbur13']
+
 
     def __init__(self):
         self.host = "127.0.0.1"
@@ -138,7 +140,7 @@ class LSRouter:
         FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket)
         FEListener.start()
 
-        Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast()
+        Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast(self.LM_receive_socket, self.LINKS, self.NODE_PORT_MAP)
         Broadcaster.start()
 
         LMListener.join()
@@ -148,12 +150,9 @@ class LSRouter:
         self.LM_receive_socket.close()
         self.forward_echo_socket.close()
 
-
     def updateGraph(self, thread_overlay_graph ):
         '''updates the Graph according to the latest link state message'''
         self.OVERLAY_GRAPH = thread_overlay_graph
-
-
 
 def Main():
     a = LSRouter()
