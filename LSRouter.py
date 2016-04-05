@@ -149,12 +149,9 @@ class LSRouter:
         self.forward_echo_socket.close()
 
 
-
     def updateGraph(self, thread_overlay_graph ):
         '''updates the Graph according to the latest link state message'''
         self.OVERLAY_GRAPH = thread_overlay_graph
-
-
 
 
 

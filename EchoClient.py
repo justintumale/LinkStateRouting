@@ -39,6 +39,10 @@ class EchoClient:
         while message is not 'quit':
             self.socket.sendto(json_echo_message.encode('utf-8'), self.router)  #send a message to Router's 50021 port
             #TODO Receive here?
+            data, address = self.socket.recvfrom(1024)
+            data = data.decode('utf-8')
+            print('Router response:', data)
+
             message = input('->')
             recipient = input('to node: ')
             echo_message = echomessage.EchoMessage('fjt14188', recipient, message)
