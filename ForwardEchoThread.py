@@ -25,15 +25,18 @@ class ForwardEchoThread(threading.Thread):
         validation = self.validate(to_node)
 
         if validation is False:                 #if the node is not valid
+            #TODO send back to client
             print("This node does not exist")
             return
         else:
             path = self.compute_shortest_path(from_node, to_node)
 
         if path == 0:
+            #TODO send back to client
             # if the node is addressed to you, send it back to your client
             print('From', from_node, 'to', to_node, ':', message)
         else:
+            #TODO send back to client
             print('this message was not addressed to you')
             pass
 
