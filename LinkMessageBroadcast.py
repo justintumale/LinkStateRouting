@@ -2,6 +2,7 @@ import threading
 import socket
 import linkmsg
 import json
+import time
 
 
 class LinkMessageBroadcast(threading.Thread):
@@ -20,16 +21,18 @@ class LinkMessageBroadcast(threading.Thread):
 
     def run(self):
         print('Running Broadcaster...')
-        for link in self.LINKS:
-            my_link = linkmsg.LinkMsg('fjt14188', link)
-            my_link_json = json.dumps(my_link.__dict__)
+        while True:
+            time.sleep(30)
+            for link in self.LINKS:
+                my_link = linkmsg.LinkMsg('fjt14188', link)
+                my_link_json = json.dumps(my_link.__dict__)
 
-            for key, value in self.NODE_PORT_MAP.items():
-                port = value[0]
-                #print('sending to this port: ', port)
-                server = (self.host, port)
-                self.LM_receive_socket.settimeout(.001)
-                self.LM_receive_socket.sendto(my_link_json.encode('utf-8'), server)
+                for key, value in self.NODE_PORT_MAP.items():
+                    port = value[0]
+                    #print('sending to this port: ', port)
+                    server = (self.host, port)
+                    self.LM_receive_socket.settimeout(.001)
+                    self.LM_receive_socket.sendto(my_link_json.encode('utf-8'), server)
 
 
 
