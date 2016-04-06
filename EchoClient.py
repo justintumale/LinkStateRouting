@@ -15,7 +15,7 @@ class EchoClient:
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self.host, self.port))
 
-        self.router = (self.host, 10063) #router port
+        self.router = (self.host, 24721) #router port
 
     def send_echo(self):
         '''Sends an echo message to the LSRouter'''

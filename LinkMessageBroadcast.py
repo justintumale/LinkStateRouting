@@ -18,7 +18,6 @@ class LinkMessageBroadcast(threading.Thread):
     def run(self):
         print('Running Broadcaster...')
 
-
         my_link = linkmsg.LinkMsg('fjt14188', 'spoofnode')
         my_link_json = json.dumps(my_link.__dict__)
 
