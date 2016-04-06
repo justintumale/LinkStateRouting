@@ -1,5 +1,6 @@
 import threading
 import LinkMessageReceive
+import socket
 
 class LinkStateListener(threading.Thread):
 
@@ -14,8 +15,13 @@ class LinkStateListener(threading.Thread):
     def run(self):
         print('Running Link State Listener..')
         while True:
-            link_message_data, link_message_address = self.LM_receive_socket.recvfrom(1024)
-            LMReceiverThread = LinkMessageReceive.LinkMessageReceive\
-                (link_message_data, link_message_address, self.LM_receive_socket, self.OVERLAY_GRAPH)
-            LMReceiverThread.run()
-            LMReceiverThread.join()
+            try:
+                link_message_data, link_message_address = self.LM_receive_socket.recvfrom(1024)
+
+                LMReceiverThread = LinkMessageReceive.LinkMessageReceive\
+                    (link_message_data, link_message_address, self.LM_receive_socket, self.OVERLAY_GRAPH)
+                LMReceiverThread.start()
+                LMReceiverThread.join()
+
+            except socket.error:
+                pass

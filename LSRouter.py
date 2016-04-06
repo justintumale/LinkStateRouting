@@ -9,6 +9,7 @@ class LSRouter:
     LM_receive_socket = ''
     forward_echo_port = ''
     forward_echo_socket = ''
+    broadcast_socket = ''
     OVERLAY_GRAPH = {'student0' : [],
                     'kbadams'   : [],
                     'jadolphe'  : [],
@@ -113,13 +114,15 @@ class LSRouter:
     def __init__(self):
         self.host = "127.0.0.1"
 
-        self.LM_receive_port = 10062
+        self.LM_receive_port = 24720
         self.LM_receive_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.LM_receive_socket.bind((self.host, self.LM_receive_port))
 
-        self.forward_echo_port = 10063
+        self.forward_echo_port = 24721
         self.forward_echo_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.forward_echo_socket.bind((self.host, self.forward_echo_port))
+
+        self.broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def initialize_link_table(self):
         """
@@ -140,7 +143,8 @@ class LSRouter:
         FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket)
         FEListener.start()
 
-        Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast(self.LM_receive_socket, self.LINKS, self.NODE_PORT_MAP)
+        Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast(self.host, self.LM_receive_socket,
+                                                                self.NODE_PORT_MAP)
         Broadcaster.start()
 
         LMListener.join()

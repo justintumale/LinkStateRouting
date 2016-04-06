@@ -21,6 +21,7 @@ class ForwardEchoThread(threading.Thread):
     def run(self):
         print('Running forward/echo thread...')
         print('parsing message...')
+
         from_node, to_node, message = self.parse_data(self.data)
 
         self.forward(from_node, to_node, message)
