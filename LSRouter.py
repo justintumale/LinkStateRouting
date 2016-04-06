@@ -3,6 +3,13 @@ import ForwardEchoListener
 import LinkStateListener
 import LinkMessageBroadcast
 
+class LiveNode:
+    node_name = ''
+    expiration_time = -1
+    def __init__(self, node_name, expiration_time):
+        self.node_name = node_name
+        self.expiration_time = expiration_time
+
 class LSRouter:
     host = ''
     LM_receive_port = ''
