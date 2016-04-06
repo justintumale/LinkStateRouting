@@ -144,7 +144,7 @@ class LSRouter:
         FEListener.start()
 
         Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast(self.host, self.LM_receive_socket,
-                                                                self.NODE_PORT_MAP)
+                                                                self.NODE_PORT_MAP, self.LINKS)
         Broadcaster.start()
 
         LMListener.join()
