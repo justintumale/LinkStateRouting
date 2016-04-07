@@ -24,6 +24,7 @@ class LinkMessageBroadcast(threading.Thread):
         while True:
             time.sleep(30)
             for link in self.LINKS:
+                #broadcast a message to all nodes informing them that you are connected to this link
                 my_link = linkmsg.LinkMsg('fjt14188', link)
                 my_link_json = json.dumps(my_link.__dict__)
 

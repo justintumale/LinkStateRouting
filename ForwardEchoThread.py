@@ -8,15 +8,16 @@ class ForwardEchoThread(threading.Thread):
     data = ''
     receiveAddress = ''
     socket = ''
-
+    LINKS = []
     OVERLAY_NETWORK = ''
 
-    def __init__(self, data, address, socket):
+    def __init__(self, data, address, socket, LINKS):
         threading.Thread.__init__(self)
         raw_data = data.decode('utf-8')
         self.data = json.loads(raw_data)
         self.receiveAddress = address
         self.socket = socket
+        self.LINKS = LINKS
 
     def run(self):
         print('Running forward/echo thread...')

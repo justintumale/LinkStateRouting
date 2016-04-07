@@ -147,7 +147,7 @@ class LSRouter:
         LMListener.start()
         self.updateGraph(LMListener.OVERLAY_GRAPH)
 
-        FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket)
+        FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket, self.LINKS)
         FEListener.start()
 
         Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast(self.host, self.LM_receive_socket,
