@@ -11,7 +11,7 @@ class EchoClient:
 
     def __init__(self):
         self.host = '127.0.0.1'
-        self.port = 5001
+        self.port = 5002
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind((self.host, self.port))
 

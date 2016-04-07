@@ -27,8 +27,16 @@ class LinkMessageReceive(threading.Thread):
         Convert the json message to a dictionary
         :return: the dictionary
         """
-        from_node = data['fromNode']
-        to_node = data['toNode']
+        if 'fromNode' in data:
+            from_node = data['fromNode']
+        elif 'from_node' in data:
+            from_node = data['from_node']
+
+        if 'toNode' in data:
+            to_node = data['toNode']
+        elif 'to_node' in data:
+            to_node = data['to_node']
+
         expiration = data['expiration']
 
 

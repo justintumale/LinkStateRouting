@@ -4,6 +4,7 @@ import LinkStateListener
 import LinkMessageBroadcast
 import OverlayGraph
 
+
 class LiveNode:
     node_name = ''
     expiration_time = -1
@@ -71,7 +72,7 @@ class LSRouter:
                     'byang9'	: [25520,	25521],
                     'dilawarz'	: [25620,	25621]}
 
-    LINKS = ['dilawarz', 'byang9', 'mwong9', 'wilbur13']
+    LINKS = ['kamercer', 'trsturbo', 'mwong9']
 
 
     def __init__(self):
