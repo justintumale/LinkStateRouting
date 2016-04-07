@@ -3,7 +3,7 @@ import socket
 import linkmsg
 import json
 import time
-
+import OverlayGraph
 
 class LinkMessageBroadcast(threading.Thread):
 
@@ -22,7 +22,7 @@ class LinkMessageBroadcast(threading.Thread):
     def run(self):
         print('Running Broadcaster...')
         while True:
-            time.sleep(30)
+            time.sleep(10)
             for link in self.LINKS:
                 #broadcast a message to all nodes informing them that you are connected to this link
                 my_link = linkmsg.LinkMsg('fjt14188', link)
@@ -34,6 +34,7 @@ class LinkMessageBroadcast(threading.Thread):
                     server = (self.host, port)
                     self.LM_receive_socket.settimeout(.001)
                     self.LM_receive_socket.sendto(my_link_json.encode('utf-8'), server)
+            print(OverlayGraph.OVERLAY_GRAPH)
 
 
 

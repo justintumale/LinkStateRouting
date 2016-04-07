@@ -1,5 +1,6 @@
 import threading
 import ForwardEchoThread
+import socket
 
 class ForwardEchoListener(threading.Thread):
     forward_echo_socket = ''
@@ -13,11 +14,14 @@ class ForwardEchoListener(threading.Thread):
     def run(self):
         print('Running Forward Echo Listener...')
         while True:
-            forward_echo_data, forward_echo_address = self.forward_echo_socket.recvfrom(1024)
-            forward_echo_THREAD = ForwardEchoThread.ForwardEchoThread\
-                (forward_echo_data, forward_echo_address, self.forward_echo_socket, self.LINKS)
-            forward_echo_THREAD.start()
-            forward_echo_THREAD.join()
+            try:
+                forward_echo_data, forward_echo_address = self.forward_echo_socket.recvfrom(1024)
+                forward_echo_THREAD = ForwardEchoThread.ForwardEchoThread\
+                    (forward_echo_data, forward_echo_address, self.forward_echo_socket, self.LINKS)
+                forward_echo_THREAD.start()
+                forward_echo_THREAD.join()
+            except socket.error:
+                pass
 
 
 

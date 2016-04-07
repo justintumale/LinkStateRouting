@@ -2,6 +2,7 @@ import socket
 import ForwardEchoListener
 import LinkStateListener
 import LinkMessageBroadcast
+import OverlayGraph
 
 class LiveNode:
     node_name = ''
@@ -17,54 +18,9 @@ class LSRouter:
     forward_echo_port = ''
     forward_echo_socket = ''
     broadcast_socket = ''
-    OVERLAY_GRAPH = {'student0' : [],
-                    'kbadams'   : [],
-                    'jadolphe'  : [],
-                    'cannan'    : [],
-                    'mbamaca'   : [],
-                    'adb2016'   : [],
-                    'bbreyel'   : [],
-                    'derosa30'  : [],
-                    'ddiener'	: [],
-                    'foretich'	: [],
-                    'coal175'	: [],
-                    'reiner'	: [],
-                    'ahayes44'	: [],
-                    'ahiggins'	: [],
-                    'da3nvy'	: [],
-                    'yd9'	    : [],
-                    'hjink94'	: [],
-                    'stevenk'	: [],
-                    'bruceli'	: [],
-                    'mattling'	: [],
-                    'erlock'	: [],
-                    'alexms'	: [],
-                    'brandonm'	: [],
-                    'jarmac76'	: [],
-                    'kamercer'	: [],
-                    'dylmorg'	: [],
-                    'nikolich'	: [],
-                    'mbp1988'	: [],
-                    'lpastor'	: [],
-                    'rpersaud'	: [],
-                    'jplizzle'	: [],
-                    'tonyr'	    : [],
-                    'mreece05'	: [],
-                    'rucker21'	: [],
-                    'quintezs'	: [],
-                    'jls93'	    : [],
-                    'kds'	    : [],
-                    'trsturbo'	: [],
-                    'fjt14188'	: [],
-                    'lvanhuss'	: [],
-                    'lucyv'	    : [],
-                    'vinsonj'	: [],
-                    'jakewebb'	: [],
-                    'whatleym'	: [],
-                    'wilbur13'	: [],
-                    'mwong9'	: [],
-                    'byang9'	: [],
-                    'dilawarz'	: []}
+
+    OVERLAY_GRAPH = OverlayGraph.OVERLAY_GRAPH
+
 
     NODE_PORT_MAP = {'student0' : [20020,   20021],
                     'kbadams'   : [21020,   21021],
@@ -155,8 +111,11 @@ class LSRouter:
         Broadcaster.start()
 
         LMListener.join()
+        print('LM joined')
         FEListener.join()
+        print('FE joined')
         Broadcaster.join()
+        print('Broadcast joined')
 
         self.LM_receive_socket.close()
         self.forward_echo_socket.close()
@@ -164,6 +123,7 @@ class LSRouter:
     def updateGraph(self, thread_overlay_graph ):
         '''updates the Graph according to the latest link state message'''
         self.OVERLAY_GRAPH = thread_overlay_graph
+        print(self.OVERLAY_GRAPH)
 
 def Main():
     a = LSRouter()
