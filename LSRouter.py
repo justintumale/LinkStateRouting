@@ -98,7 +98,7 @@ class LSRouter:
         LMListener = LinkStateListener.LinkStateListener(self.LM_receive_socket, self.OVERLAY_GRAPH)
         LMListener.start()
         #might not even need this method
-        self.updateGraph(LMListener.OVERLAY_GRAPH)
+        #self.updateGraph(LMListener.OVERLAY_GRAPH)
 
         overlay_graph_monitor = OverlayGraphMonitor.OverlayGraphMonitor()
         overlay_graph_monitor.start()

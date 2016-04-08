@@ -83,6 +83,7 @@ def create_link(from_node, to_node, expiration):
 
 
 #Testing
+'''
 OVERLAY_GRAPH['fjt14188'].append(LiveNode('mwong9', 9000))
 OVERLAY_GRAPH['fjt14188'].append(LiveNode('dylmorg', 9000))
 print()
@@ -92,11 +93,15 @@ create_link('fjt14188', 'lucyv', 2000)
 create_link('fjt14188', 'mwong9', 2000)
 print()
 print()
+'''
 
 #Print--
-for key in OVERLAY_GRAPH:
-    print(key, end=': ')
-    for links in OVERLAY_GRAPH[key]:
-        print(links.name, links.expiration_time, '|', end=' ')
-    print()
+def print_graph():
+    print('---------------------------------CURRENT OVERLAY NETWORK---------------------------------------')
+    for key in OVERLAY_GRAPH:
+        print(key, end=': ')
+        for links in OVERLAY_GRAPH[key]:
+            print(links.name, links.expiration_time, '|', end=' ')
+        print()
+    print('-----------------------------------------------------------------------------------------------')
 

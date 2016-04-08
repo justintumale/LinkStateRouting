@@ -34,7 +34,8 @@ class LinkMessageBroadcast(threading.Thread):
                     server = (self.host, port)
                     self.LM_receive_socket.settimeout(.001)
                     self.LM_receive_socket.sendto(my_link_json.encode('utf-8'), server)
-            print(OverlayGraph.OVERLAY_GRAPH)
+            #print(OverlayGraph.OVERLAY_GRAPH)
+            OverlayGraph.print_graph()
 
 
 

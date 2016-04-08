@@ -1,5 +1,6 @@
 import threading
 import json
+import OverlayGraph
 
 class LinkMessageReceive(threading.Thread):
     data = ''
@@ -39,15 +40,9 @@ class LinkMessageReceive(threading.Thread):
 
         expiration = data['expiration']
 
-
-        print('from node', from_node)
-        print('to node', to_node)
-        print('exipration', expiration)
-
-
-
        #return ''.join(from_node.strip()), ''.join(to_node.strip()), ''.join(expiration)
         return from_node, to_node, expiration
 
     def update_graph(self, from_node, to_node, expiration):
-        self.OVERLAY_GRAPH[from_node].append(to_node)
+        #self.OVERLAY_GRAPH[from_node].append(to_node)
+        OverlayGraph.create_link(from_node, to_node, expiration)
