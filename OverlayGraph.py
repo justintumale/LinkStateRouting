@@ -1,11 +1,11 @@
 from pprint import pprint
 
 class LiveNode:
-    node_name = ''
+    name = ''
     expiration_time = -1
     live = False
-    def __init__(self, node_name, expiration_time):
-        self.node_name = node_name
+    def __init__(self, name, expiration_time):
+        self.name = name
         self.expiration_time = expiration_time
         if self.expiration_time > 0:
             self.live = False
@@ -71,23 +71,32 @@ def create_link(from_node, to_node, expiration):
     else:
 
         for i in range(0, len(OVERLAY_GRAPH[from_node])):
-            if to_node != OVERLAY_GRAPH[from_node][i]:
+
+            if to_node != OVERLAY_GRAPH[from_node][i].name:
                 pass
             else:
                 del OVERLAY_GRAPH[from_node][i]
                 OVERLAY_GRAPH[from_node].append(LiveNode(to_node, expiration))
                 break
+        else:
             OVERLAY_GRAPH[from_node].append(LiveNode(to_node, expiration))
 
 
+#Testing
 OVERLAY_GRAPH['fjt14188'].append(LiveNode('mwong9', 9000))
 OVERLAY_GRAPH['fjt14188'].append(LiveNode('dylmorg', 9000))
+print()
+print()
 create_link('fjt14188', 'lucyv', 9000)
+create_link('fjt14188', 'lucyv', 2000)
+create_link('fjt14188', 'mwong9', 2000)
+print()
+print()
 
-
+#Print--
 for key in OVERLAY_GRAPH:
     print(key, end=': ')
     for links in OVERLAY_GRAPH[key]:
-        print(links.node_name, end=' ')
+        print(links.name, links.expiration_time, '|', end=' ')
     print()
 
