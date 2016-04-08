@@ -3,6 +3,7 @@ import ForwardEchoListener
 import LinkStateListener
 import LinkMessageBroadcast
 import OverlayGraph
+import OverlayGraphMonitor
 
 
 class LSRouter:
@@ -93,9 +94,14 @@ class LSRouter:
         '''run the listeners to handle concurrent sending/receiving of messages'''
         print('Running router...')
 
+
         LMListener = LinkStateListener.LinkStateListener(self.LM_receive_socket, self.OVERLAY_GRAPH)
         LMListener.start()
+        #might not even need this method
         self.updateGraph(LMListener.OVERLAY_GRAPH)
+
+        overlay_graph_monitor = OverlayGraphMonitor.OverlayGraphMonitor()
+        overlay_graph_monitor.start()
 
         FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket, self.LINKS)
         FEListener.start()
@@ -105,11 +111,9 @@ class LSRouter:
         Broadcaster.start()
 
         LMListener.join()
-        print('LM joined')
+        overlay_graph_monitor.join()
         FEListener.join()
-        print('FE joined')
         Broadcaster.join()
-        print('Broadcast joined')
 
         self.LM_receive_socket.close()
         self.forward_echo_socket.close()
