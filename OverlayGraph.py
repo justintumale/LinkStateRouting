@@ -4,6 +4,7 @@ class LiveNode:
     name = ''
     expiration_time = -1
     live = False
+    weight = 9999
     def __init__(self, name, expiration_time):
         self.name = name
         self.expiration_time = expiration_time
