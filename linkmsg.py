@@ -3,9 +3,9 @@ import json, time
 class LinkMsg:
     '''LinkStateMessage, reconstituted from JSON'''
 
-    def __init__(self, fromNode = None, toNode=None) :
-        self.fromNode   = fromNode
-        self.toNode     = toNode
+    def __init__(self, from_node = None, to_node=None) :
+        self.from_node   = from_node
+        self.to_node     = to_node
         self.expiration = int(time.time())+120 
 
     def reconstitute_(self, jsonText):
