@@ -49,8 +49,11 @@ class ForwardEchoThread(threading.Thread):
         if validation is False:                 #if the node is not valid
 
             error_message = "Error: This node does not exist"
+            print(error_message)
+            destination_node = self.NODE_PORT_MAP[from_node]
+            destination_port = destination_node[1]
 
-            self.socket.sendto(error_message)
+            self.socket.sendto(error_message, destination_port)
             return
         else:
 
@@ -61,17 +64,21 @@ class ForwardEchoThread(threading.Thread):
                 forward_message = str(forward_message_proxy)
                 self.socket.sendto(forward_message.encode('utf-8'), self.receiveAddress)
             else:
+                #compute shortest path
                 path = self.compute_shortest_path(from_node, to_node, self.OVERLAY_GRAPH)
+                #select the node to send it to
                 destination = path[1]
-                destination_address = self.NODE_PORT_MAP[destination]
+                destination_ports = self.NODE_PORT_MAP[destination]
+                destination_address = destination_ports[1]
 
-                #print('this message was not addressed to you')
                 reply_message = 'forwarding message to ' + destination
                 self.socket.sendto(reply_message.encode('utf-8'), self.receiveAddress)
 
-                forward_message_proxy = 'From', from_node, 'to', to_node, ':', msg
-                forward_message = str(forward_message_proxy)
-                self.socket.sendto(forward_message.encode('utf-8'), destination_address)
+                forward_message = echomessage.EchoMessage(from_node, to_node, msg)
+                forward_message = str(forward_message)
+
+
+                self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_address))
 
 
     def validate(self, to_node):

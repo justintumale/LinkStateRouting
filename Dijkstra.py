@@ -72,24 +72,20 @@ def relax_neighbors(node, overlay_graph):
         if (node_weight_map[neighbor] >= node_weight_map[node] + 1):
             node_weight_map[neighbor] = node_weight_map[node] + 1
             node_parent_map[neighbor] = node
-        #node_weight_map[neighbor] = min(node_weight_map[neighbor], node_weight_map[node] + 1)
-        #print('putting', neighbor, node_weight_map[neighbor], 'into the queue...')
         priority_queue.put((node_weight_map[neighbor], neighbor))
 
 
-def findShortestPath(node_parent_map, root, destination, splist):
+def find_shortest_path(node_parent_map, root, destination, splist):
     if destination == root:
         splist.append(root)
         #print('this is the unreturned path', a)
         return splist
     else:
         splist.append(destination)
-        return findShortestPath(node_parent_map,root, node_parent_map[destination], splist)
+        return find_shortest_path(node_parent_map,root, node_parent_map[destination], splist)
 
 
-
-
-def dijkstras(root, destination, overlay_graph, lock ):
+def dijkstras(root, destination, overlay_graph ):
     #1 start at root
     #2 push node to visited
     #3 find node's neighbors
@@ -97,7 +93,6 @@ def dijkstras(root, destination, overlay_graph, lock ):
     #5 push all the neighbors to the priority queue
     #6 visit the neighbor with the lowest weight
     #7 repeat steps 2 - 7 until destination has been pushed to visited
-    #lock.acquire()
 
     initialize_weights(overlay_graph, node_weight_map, 'fjt14188')
     relax_neighbors(root, overlay_graph)
@@ -115,7 +110,7 @@ def dijkstras(root, destination, overlay_graph, lock ):
     #lock.release()
 
     list = []
-    shortest_path = findShortestPath(node_parent_map, root, destination, list)
+    shortest_path = find_shortest_path(node_parent_map, root, destination, list)
     shortest_path.reverse()
     return(shortest_path)
 
