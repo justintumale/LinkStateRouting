@@ -4,6 +4,7 @@ import LinkStateListener
 import LinkMessageBroadcast
 import OverlayGraph
 import OverlayGraphMonitor
+import time
 
 
 class LSRouter:
@@ -82,6 +83,10 @@ class LSRouter:
                     'dilawarz'	: [25620,	25621]}
 
     LINKS = ['kamercer', 'trsturbo', 'mwong9']
+    OverlayGraph.create_link('fjt14188', 'kamercer', int(time.time())+120 )
+    OverlayGraph.create_link('fjt14188', 'mwong9', int(time.time())+120 )
+    OverlayGraph.create_link('fjt14188', 'trsturbo', int(time.time())+120 )
+
 
 
     def __init__(self):

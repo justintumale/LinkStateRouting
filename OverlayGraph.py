@@ -58,7 +58,16 @@ OVERLAY_GRAPH = {'student0' : [],
                 'wilbur13'	: [],
                 'mwong9'	: [],
                 'byang9'	: [],
-                'dilawarz'	: []}
+                'dilawarz'	: [],
+                'denver'    : [],
+                'frisco'    : [],
+                'durango'   : [],
+                'leadville' : [],
+                'salida'    : [],
+                'aspen'     : [],
+                'silverton' : [],
+                'ouray'     : []
+                 }
 
 
 def create_link(from_node, to_node, expiration):
