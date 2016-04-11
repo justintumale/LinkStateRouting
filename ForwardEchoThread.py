@@ -47,8 +47,9 @@ class ForwardEchoThread(threading.Thread):
         validation = self.validate(to_node)
 
         if validation is False:                 #if the node is not valid
-            #TODO send back to client
+
             error_message = "Error: This node does not exist"
+
             self.socket.sendto(error_message)
             return
         else:
@@ -60,7 +61,6 @@ class ForwardEchoThread(threading.Thread):
                 forward_message = str(forward_message_proxy)
                 self.socket.sendto(forward_message.encode('utf-8'), self.receiveAddress)
             else:
-                #TODO forward to other client
                 path = self.compute_shortest_path(from_node, to_node, self.OVERLAY_GRAPH)
                 destination = path[1]
                 destination_address = self.NODE_PORT_MAP[destination]
@@ -75,9 +75,7 @@ class ForwardEchoThread(threading.Thread):
 
 
     def validate(self, to_node):
-        #TODO check if node exists
-        #TODO check if there is a path to the node
-        if 1 == 2:
+        if to_node not in self.OVERLAY_GRAPH:
             return False
         else:
             return True

@@ -3,6 +3,7 @@ import math
 import time
 import queue
 import pprint
+import threading
 
 class Node():
     def __init__(self, name, connections=None):
@@ -34,7 +35,6 @@ node_parent_map = {}
 not_visited = []
 priority_queue = queue.PriorityQueue(60)
 visited_set = []
-
 
 def initialize_weights(overlay_graph, node_weight_map, root):
     node_weight_map[root] = root
@@ -89,7 +89,7 @@ def findShortestPath(node_parent_map, root, destination, splist):
 
 
 
-def dijkstras(root, destination, overlay_graph):
+def dijkstras(root, destination, overlay_graph, lock ):
     #1 start at root
     #2 push node to visited
     #3 find node's neighbors
@@ -97,6 +97,7 @@ def dijkstras(root, destination, overlay_graph):
     #5 push all the neighbors to the priority queue
     #6 visit the neighbor with the lowest weight
     #7 repeat steps 2 - 7 until destination has been pushed to visited
+    #lock.acquire()
 
     initialize_weights(overlay_graph, node_weight_map, 'fjt14188')
     relax_neighbors(root, overlay_graph)
@@ -111,6 +112,7 @@ def dijkstras(root, destination, overlay_graph):
         relax_neighbors(node, overlay_graph)
         #time.sleep(1)
         if destination in visited_set: break
+    #lock.release()
 
     list = []
     shortest_path = findShortestPath(node_parent_map, root, destination, list)
