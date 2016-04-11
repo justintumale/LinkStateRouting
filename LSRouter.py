@@ -15,6 +15,21 @@ class LSRouter:
     broadcast_socket = ''
 
     OVERLAY_GRAPH = OverlayGraph.OVERLAY_GRAPH
+    #spoof graph
+    '''
+    OverlayGraph.create_link('fjt14188', 'kamercer', 9000000000000)
+    OverlayGraph.create_link('fjt14188', 'mwong9', 9000000000000)
+    OverlayGraph.create_link('fjt14188', 'trsturbo', 9000000000000)
+    OverlayGraph.create_link('kamercer', 'fjt14188', 9000000000000)
+    OverlayGraph.create_link('mwong9', 'fjt14177', 9000000000000)
+    OverlayGraph.create_link('trsturbo', 'fjt14188', 9000000000000)
+    OverlayGraph.create_link('kamercer', 'cannan', 9000000000000)
+    OverlayGraph.create_link('mwong9', 'kamercer', 9000000000000)
+    OverlayGraph.create_link('trsturbo', 'bbreyel', 9000000000000)
+    OverlayGraph.create_link('bbreyel', 'cannan', 9000000000000)
+    '''
+
+
 
 
     NODE_PORT_MAP = {'student0' : [20020,   20021],

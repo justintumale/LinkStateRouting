@@ -11,8 +11,6 @@ class LiveNode:
         if self.expiration_time > 0:
             self.live = False
 
-
-
 OVERLAY_GRAPH = {'student0' : [],
                 'kbadams'   : [],
                 'jadolphe'  : [],

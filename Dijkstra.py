@@ -108,7 +108,7 @@ def dijkstras(root, destination, overlay_graph):
         #remove node from not_visited list
         not_visited.remove(node)
         #relax neighbors & push them to priority queue
-        relax_neighbors(node)
+        relax_neighbors(node, overlay_graph)
         #time.sleep(1)
         if destination in visited_set: break
 
