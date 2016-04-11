@@ -19,8 +19,13 @@ OverlayGraph.create_link('fjt14188', 'jadolphe', 10000)
 OverlayGraph.create_link('jadolphe', 'coal175', 10000)
 OverlayGraph.create_link('coal175', 'cannan', 10000)
 OverlayGraph.create_link('cannan', 'mwong9', 10000)
+OverlayGraph.create_link('fjt14188', 'adb2016', 10000)
+OverlayGraph.create_link('adb2016', 'derosa30', 10000)
+OverlayGraph.create_link('derosa30', 'bbereyel', 10000)
+OverlayGraph.create_link('mwong9', 'reiner', 10000)
+OverlayGraph.create_link('bbreyel', 'reiner', 10000)
 
-OverlayGraph.print_graph()
+#OverlayGraph.print_graph()
 
 every_node = []
 node_weight_map = {}
@@ -56,17 +61,6 @@ def find_not_visited_neighbors(overlay_graph, node, not_visited):
         else:
             pass
     return neighbors
-
-'''
-def find_neighbors(overlay_graph, node):
-    neighbors = []
-    for key in every_node:
-        if check_if_neighbors(overlay_graph, node, key):
-            neighbors.append(key)
-        else:
-            pass
-    return neighbors
-'''
 
 def relax_neighbors(node):
     neighbors = find_not_visited_neighbors(overlay_graph, node, not_visited)
@@ -115,34 +109,18 @@ def dijkstras(root, destination):
         #time.sleep(1)
         if destination in visited_set: break
 
-    print('calculating shortest path...')
     list = []
     shortest_path = findShortestPath(node_parent_map, root, destination, list)
-    print('this is the shortest path....', shortest_path)
+    shortest_path.reverse()
+    return(shortest_path)
 
 
-
-dijkstras('fjt14188', 'cannan')
-
+'''
 pp = pprint.PrettyPrinter(indent=4)
-'''
-list = []
+print('calculating shortest path...')
+print(dijkstras('fjt14188', 'reiner'))
 
-shortest_path = findShortestPath(node_parent_map, 'fjt14188', 'cannan', list)
-print('shortest path! ', shortest_path)
-'''
-
-'''
-#pp.pprint(node_weight_map)
-#print()
+pp.pprint(node_weight_map)
+print()
 pp.pprint(node_parent_map)
 '''
-
-
-
-
-
-
-
-
-
