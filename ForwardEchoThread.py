@@ -1,6 +1,8 @@
 import threading
 import json
 import echomessage
+import Dijkstra
+import OverlayGraph
 
 
 class ForwardEchoThread(threading.Thread):
@@ -9,15 +11,17 @@ class ForwardEchoThread(threading.Thread):
     receiveAddress = ''
     socket = ''
     LINKS = []
-    OVERLAY_NETWORK = ''
+    OVERLAY_GRAPH = OverlayGraph.OVERLAY_GRAPH
+    NODE_PORT_MAP = {}
 
-    def __init__(self, data, address, socket, LINKS):
+    def __init__(self, data, address, socket, LINKS, NODE_PORT_MAP):
         threading.Thread.__init__(self)
         raw_data = data.decode('utf-8')
         self.data = json.loads(raw_data)
         self.receiveAddress = address
         self.socket = socket
         self.LINKS = LINKS
+        self.NODE_PORT_MAP = NODE_PORT_MAP
 
     def run(self):
         print('Running forward/echo thread...')
@@ -49,9 +53,7 @@ class ForwardEchoThread(threading.Thread):
             return
         else:
 
-            path = self.compute_shortest_path(from_node, to_node)
-
-            if path == 0:
+            if to_node == 'fjt14188':
                 # if the node is addressed to you, send it back to your client
                 print('From', from_node, 'to', to_node, ':', msg)
                 forward_message_proxy = 'From', from_node, 'to', to_node, ':', msg
@@ -59,13 +61,17 @@ class ForwardEchoThread(threading.Thread):
                 self.socket.sendto(forward_message.encode('utf-8'), self.receiveAddress)
             else:
                 #TODO forward to other client
+                path = self.compute_shortest_path(from_node, to_node, self.OVERLAY_GRAPH)
+                destination = path[1]
+                destination_address = self.NODE_PORT_MAP[destination]
 
-                print('this message was not addressed to you')
-                reply_message = 'this message is not addressed to you'
+                #print('this message was not addressed to you')
+                reply_message = 'forwarding message to ' + destination
                 self.socket.sendto(reply_message.encode('utf-8'), self.receiveAddress)
 
                 forward_message_proxy = 'From', from_node, 'to', to_node, ':', msg
                 forward_message = str(forward_message_proxy)
+                self.socket.sendto(forward_message.encode('utf-8'), destination_address)
 
 
     def validate(self, to_node):
@@ -76,9 +82,7 @@ class ForwardEchoThread(threading.Thread):
         else:
             return True
 
-    def compute_shortest_path(self, from_node, to_node):
-        self.OVERLAY_NETWORK = self.OVERLAY_NETWORK
-        if to_node == 'fjt14188':
-            return 0
-        else:
-            return True
+    def compute_shortest_path(self, from_node, to_node, OVERLAY_GRAPH):
+
+        path = Dijkstra.dijkstras(from_node, to_node, OVERLAY_GRAPH)
+        return path

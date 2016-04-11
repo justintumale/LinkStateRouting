@@ -103,7 +103,7 @@ class LSRouter:
         overlay_graph_monitor = OverlayGraphMonitor.OverlayGraphMonitor()
         overlay_graph_monitor.start()
 
-        FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket, self.LINKS)
+        FEListener = ForwardEchoListener.ForwardEchoListener(self.forward_echo_socket, self.LINKS, self.NODE_PORT_MAP)
         FEListener.start()
 
         Broadcaster = LinkMessageBroadcast.LinkMessageBroadcast(self.host, self.LM_receive_socket,

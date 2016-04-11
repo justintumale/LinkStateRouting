@@ -11,7 +11,7 @@ class Node():
         if connections is not None:
             self.connections.update(connections)
 
-
+'''
 overlay_graph = OverlayGraph.OVERLAY_GRAPH
 OverlayGraph.create_link('fjt14188', 'mbamaca', 10000)
 OverlayGraph.create_link('mbamaca', 'cannan', 10000)
@@ -26,6 +26,7 @@ OverlayGraph.create_link('mwong9', 'reiner', 10000)
 OverlayGraph.create_link('bbreyel', 'reiner', 10000)
 
 #OverlayGraph.print_graph()
+'''''
 
 every_node = []
 node_weight_map = {}
@@ -47,11 +48,13 @@ def initialize_weights(overlay_graph, node_weight_map, root):
             node_weight_map[key] = infinity
             not_visited.append(key)
 
+
 def check_if_neighbors(overlay_graph, root, branch):
     for link in overlay_graph[root]:
         if link.name == branch:
             return True
     return False
+
 
 def find_not_visited_neighbors(overlay_graph, node, not_visited):
     neighbors = []
@@ -62,7 +65,7 @@ def find_not_visited_neighbors(overlay_graph, node, not_visited):
             pass
     return neighbors
 
-def relax_neighbors(node):
+def relax_neighbors(node, overlay_graph):
     neighbors = find_not_visited_neighbors(overlay_graph, node, not_visited)
     #neighbors = find_neighbors(overlay_graph, node)
     for neighbor in neighbors:
@@ -86,7 +89,7 @@ def findShortestPath(node_parent_map, root, destination, splist):
 
 
 
-def dijkstras(root, destination):
+def dijkstras(root, destination, overlay_graph):
     #1 start at root
     #2 push node to visited
     #3 find node's neighbors
@@ -96,7 +99,7 @@ def dijkstras(root, destination):
     #7 repeat steps 2 - 7 until destination has been pushed to visited
 
     initialize_weights(overlay_graph, node_weight_map, 'fjt14188')
-    relax_neighbors(root)
+    relax_neighbors(root, overlay_graph)
     while True:
 
         node = priority_queue.get()[1]
