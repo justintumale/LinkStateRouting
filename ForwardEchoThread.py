@@ -5,6 +5,9 @@ import Dijkstra
 import OverlayGraph
 
 
+class TimedOutExc(Exception):
+  pass
+
 class ForwardEchoThread(threading.Thread):
 
     data = ''
@@ -65,20 +68,25 @@ class ForwardEchoThread(threading.Thread):
                 self.socket.sendto(forward_message.encode('utf-8'), self.receiveAddress)
             else:
                 #compute shortest path
-                path = self.compute_shortest_path(from_node, to_node, self.OVERLAY_GRAPH)
-                #select the node to send it to
-                destination = path[1]
-                destination_ports = self.NODE_PORT_MAP[destination]
-                destination_address = destination_ports[1]
+                try:
+                    path = self.compute_shortest_path(from_node, to_node, self.OVERLAY_GRAPH)
+                    #select the node to send it to
+                    destination = path[1]
+                    destination_ports = self.NODE_PORT_MAP[destination]
+                    destination_address = destination_ports[1]
 
-                reply_message = 'forwarding message to ' + destination
-                self.socket.sendto(reply_message.encode('utf-8'), self.receiveAddress)
+                    reply_message = 'forwarding message to ' + destination
+                    self.socket.sendto(reply_message.encode('utf-8'), self.receiveAddress)
 
-                forward_message = echomessage.EchoMessage(from_node, to_node, msg)
-                forward_message = str(forward_message)
+                    forward_message = echomessage.EchoMessage(from_node, to_node, msg)
+                    forward_message = str(forward_message)
 
 
-                self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_address))
+                    self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_address))
+                    
+                except TimedOutExc:
+                    print('Error: there is currently no path to this node.')
+
 
 
     def validate(self, to_node):

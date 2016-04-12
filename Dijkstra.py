@@ -4,13 +4,34 @@ import time
 import queue
 import pprint
 import threading
+import signal
 
-class Node():
+'''class Node():
     def __init__(self, name, connections=None):
         self.name = name
         self.connections = {}
         if connections is not None:
             self.connections.update(connections)
+'''
+
+
+class TimedOutExc(Exception):
+  pass
+
+def deadline(timeout, *args):
+  def decorate(f):
+    def handler(signum, frame):
+      raise TimedOutExc()
+
+    def new_j(*args):
+
+      signal.signal(signal.SIGALRM, handler)
+      signal.alarm(timeout)
+      return f(*args)
+
+    new_j.__name__ = new_j.__name__
+    return new_j
+  return decorate
 
 '''
 overlay_graph = OverlayGraph.OVERLAY_GRAPH
@@ -38,7 +59,8 @@ visited_set = []
 
 def initialize_weights(overlay_graph, node_weight_map, root):
     node_weight_map[root] = root
-    infinity = math.inf
+    #infinity = math.inf
+    infinity = 9999 #infinity not working on the Vm
     visited_set.append(root)
     for key in overlay_graph:
         every_node.append(key)
@@ -85,6 +107,7 @@ def find_shortest_path(node_parent_map, root, destination, splist):
         return find_shortest_path(node_parent_map,root, node_parent_map[destination], splist)
 
 
+@deadline(5)
 def dijkstras(root, destination, overlay_graph ):
     #1 start at root
     #2 push node to visited
