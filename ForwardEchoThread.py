@@ -47,11 +47,14 @@ class ForwardEchoThread(threading.Thread):
         if validation is False:                 #if the node is not valid
 
             error_message = "Error: This node does not exist"
-            print(error_message)
+            forward_message = echomessage.EchoMessage(from_node, to_node, error_message)
+            forward_message = json.dumps(forward_message.__dict__)
+
             destination_node = self.NODE_PORT_MAP[from_node]
             destination_port = destination_node[1]
 
-            self.socket.sendto(error_message.encode('utf-8'), ("127.0.0.1", destination_port))
+            self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_port))
+
             return
         else:
 
@@ -63,6 +66,8 @@ class ForwardEchoThread(threading.Thread):
 
                 self.socket.sendto(forward_message.encode('utf-8'), ('127.0.0.1', 5002))
                 print('receive Address', self.receiveAddress)
+
+                return
 
             else:
                 #compute shortest path
@@ -78,25 +83,26 @@ class ForwardEchoThread(threading.Thread):
                     destination_node = self.NODE_PORT_MAP[from_node]
                     destination_port = destination_node[1]
                     self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_port))
-                    print('No path available.')
+
+                    return
+
                 else:
                     #select the node to send it to
                     destination = path[1]
                     destination_ports = self.NODE_PORT_MAP[destination]
                     destination_address = destination_ports[1]
 
+                    '''
                     reply_message = 'forwarding message to ' + destination
                     self.socket.sendto(reply_message.encode('utf-8'), self.receiveAddress)
+                    '''
 
                     forward_message = echomessage.EchoMessage(from_node, to_node, msg)
-                    forward_message = str(forward_message)
-
+                    forward_message = json.dumps(forward_message.__dict__)
 
                     self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_address))
 
-
-
-
+                    return
 
     def validate(self, to_node):
         if to_node not in self.OVERLAY_GRAPH:
