@@ -5,9 +5,6 @@ import Dijkstra
 import OverlayGraph
 
 
-class TimedOutExc(Exception):
-  pass
-
 class ForwardEchoThread(threading.Thread):
 
     data = ''
@@ -27,8 +24,6 @@ class ForwardEchoThread(threading.Thread):
         self.NODE_PORT_MAP = NODE_PORT_MAP
 
     def run(self):
-        print('Running forward/echo thread...')
-        print('parsing message...')
 
         from_node, to_node, message = self.parse_data(self.data)
 
@@ -56,20 +51,35 @@ class ForwardEchoThread(threading.Thread):
             destination_node = self.NODE_PORT_MAP[from_node]
             destination_port = destination_node[1]
 
-            self.socket.sendto(error_message, destination_port)
+            self.socket.sendto(error_message.encode('utf-8'), ("127.0.0.1", destination_port))
             return
         else:
 
             if to_node == 'fjt14188':
                 # if the node is addressed to you, send it back to your client
-                print('From', from_node, 'to', to_node, ':', msg)
-                forward_message_proxy = 'From', from_node, 'to', to_node, ':', msg
-                forward_message = str(forward_message_proxy)
-                self.socket.sendto(forward_message.encode('utf-8'), self.receiveAddress)
+
+                forward_message = echomessage.EchoMessage(from_node, to_node, msg)
+                forward_message = json.dumps(forward_message.__dict__)
+
+                self.socket.sendto(forward_message.encode('utf-8'), ('127.0.0.1', 5002))
+                print('receive Address', self.receiveAddress)
+
             else:
                 #compute shortest path
-                try:
-                    path = self.compute_shortest_path(from_node, to_node, self.OVERLAY_GRAPH)
+
+                path = self.compute_shortest_path(from_node, to_node, self.OVERLAY_GRAPH)
+                if path == None:
+                    error_message = "Error: No existing path to " + to_node + "."
+
+                    forward_message = echomessage.EchoMessage('fjt14188', from_node, error_message)
+                    forward_message = json.dumps(forward_message.__dict__)
+
+
+                    destination_node = self.NODE_PORT_MAP[from_node]
+                    destination_port = destination_node[1]
+                    self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_port))
+                    print('No path available.')
+                else:
                     #select the node to send it to
                     destination = path[1]
                     destination_ports = self.NODE_PORT_MAP[destination]
@@ -83,9 +93,8 @@ class ForwardEchoThread(threading.Thread):
 
 
                     self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_address))
-                    
-                except TimedOutExc:
-                    print('Error: there is currently no path to this node.')
+
+
 
 
 
@@ -99,3 +108,4 @@ class ForwardEchoThread(threading.Thread):
 
         path = Dijkstra.dijkstras(from_node, to_node, OVERLAY_GRAPH)
         return path
+

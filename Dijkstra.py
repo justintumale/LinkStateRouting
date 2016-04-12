@@ -4,7 +4,6 @@ import time
 import queue
 import pprint
 import threading
-import signal
 
 '''class Node():
     def __init__(self, name, connections=None):
@@ -13,26 +12,6 @@ import signal
         if connections is not None:
             self.connections.update(connections)
 '''
-
-
-class TimedOutExc(Exception):
-  pass
-
-def deadline(timeout, *args):
-  def decorate(f):
-    def handler(signum, frame):
-      raise TimedOutExc()
-
-    def new_j(*args):
-
-      signal.signal(signal.SIGALRM, handler)
-      signal.alarm(timeout)
-      return f(*args)
-
-    new_j.__name__ = new_j.__name__
-    return new_j
-  return decorate
-
 '''
 overlay_graph = OverlayGraph.OVERLAY_GRAPH
 OverlayGraph.create_link('fjt14188', 'mbamaca', 10000)
@@ -107,7 +86,7 @@ def find_shortest_path(node_parent_map, root, destination, splist):
         return find_shortest_path(node_parent_map,root, node_parent_map[destination], splist)
 
 
-@deadline(5)
+
 def dijkstras(root, destination, overlay_graph ):
     #1 start at root
     #2 push node to visited
@@ -117,26 +96,33 @@ def dijkstras(root, destination, overlay_graph ):
     #6 visit the neighbor with the lowest weight
     #7 repeat steps 2 - 7 until destination has been pushed to visited
 
+
     initialize_weights(overlay_graph, node_weight_map, 'fjt14188')
     relax_neighbors(root, overlay_graph)
-    while True:
 
+    path_available = True
+    while True:
+        if priority_queue.empty():
+            print('breaking')
+            path_available = False
+            break
         node = priority_queue.get()[1]
         #push node to visited
         visited_set.append(node)
         #remove node from not_visited list
-        not_visited.remove(node)
+        if node in not_visited:
+            not_visited.remove(node)
         #relax neighbors & push them to priority queue
         relax_neighbors(node, overlay_graph)
-        #time.sleep(1)
         if destination in visited_set: break
-    #lock.release()
 
-    list = []
-    shortest_path = find_shortest_path(node_parent_map, root, destination, list)
-    shortest_path.reverse()
-    return(shortest_path)
-
+    if path_available:
+        list = []
+        shortest_path = find_shortest_path(node_parent_map, root, destination, list)
+        shortest_path.reverse()
+        return(shortest_path)
+    else:
+        return
 
 '''
 pp = pprint.PrettyPrinter(indent=4)
@@ -147,3 +133,4 @@ pp.pprint(node_weight_map)
 print()
 pp.pprint(node_parent_map)
 '''
+
