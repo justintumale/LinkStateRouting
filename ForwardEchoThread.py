@@ -92,10 +92,12 @@ class ForwardEchoThread(threading.Thread):
                     destination_ports = self.NODE_PORT_MAP[destination]
                     destination_address = destination_ports[1]
 
-                    '''
+
                     reply_message = 'forwarding message to ' + destination
-                    self.socket.sendto(reply_message.encode('utf-8'), self.receiveAddress)
-                    '''
+                    ack = echomessage.EchoMessage(from_node, to_node, reply_message)
+                    ack = json.dumps(ack.__dict__)
+                    self.socket.sendto(ack.encode('utf-8'), self.receiveAddress)
+
 
                     forward_message = echomessage.EchoMessage(from_node, to_node, msg)
                     forward_message = json.dumps(forward_message.__dict__)
