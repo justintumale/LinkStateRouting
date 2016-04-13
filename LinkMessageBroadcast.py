@@ -6,6 +6,9 @@ import time
 import OverlayGraph
 
 class LinkMessageBroadcast(threading.Thread):
+    '''
+    Broadcast our current links to all nodes in the network.
+    '''
 
     LM_receive_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     NODE_PORT_MAP = {'key':'value'}

@@ -3,6 +3,9 @@ import LinkMessageReceive
 import socket
 
 class LinkStateListener(threading.Thread):
+    '''
+    Listen for incoming link-state messages and pass it on to the LinkMessageReceiverThread.
+    '''
 
     LM_receive_socket = ''
     OVERLAY_GRAPH = {}

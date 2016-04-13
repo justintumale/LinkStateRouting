@@ -1,11 +1,12 @@
 # LinkStateRouting
+Justin Tumale
 Implements an overlay network using link state routing and forwarding.
 
 
-In order to run the code:
+To run, first run the LSRouter.
+Then run the Echo Client.
 
-    1. (If the LSRouter is not running already)...
-            python3.4 LSRouter.py
-
-    2. Run the client:
-            python3.4 EchoCLient.py
+To send message from the EchoClient...
+type the message first and then press enter.
+The EchoCLient will prompt you for a to_node afterwards.
+Type the to_node and the press enter.

@@ -3,12 +3,24 @@ import json
 import OverlayGraph
 
 class LinkMessageReceive(threading.Thread):
+    '''This class is responsible for receiving link messages from other nodes and then
+    updating the OverlayGraph according to the link messages.'''
+
     data = ''
     address = ''
     LM_receive_socket = ''
     OVERLAY_GRAPH = {}
 
     def __init__(self, data, address, socket, OVERLAY_GRAPH):
+        '''
+        Initialize.
+
+        :param data:    the data received from another node
+        :param address: the address in which it was received from
+        :param socket:  the LSRouter's socket
+        :param OVERLAY_GRAPH: the OverlayGraph containing the structure of the network
+        :return:
+        '''
         threading.Thread.__init__(self)
         raw_data = data.decode('utf-8')
         self.data = json.loads(raw_data)
@@ -17,6 +29,8 @@ class LinkMessageReceive(threading.Thread):
         self.OVERLAY_GRAPH = OVERLAY_GRAPH
 
     def run(self):
+        '''Function for feeding the input into the parser and then
+        updating the graph according to the returned values.'''
         print('Running Link Message Receiver...')
         #print('Link Message Receiver Overlay:', self.OVERLAY_GRAPH)
         print("LINK STATE MESSAGE RECEIVED: ", self.data)
@@ -25,8 +39,9 @@ class LinkMessageReceive(threading.Thread):
 
     def parse_data(self, data):
         """
-        Convert the json message to a dictionary
-        :return: the dictionary
+        Parse the json message into strings.
+        :param data:    the data received from another node
+        :return: the from_node, to_node, and expiration time.
         """
         if 'fromNode' in data:
             from_node = data['fromNode']
@@ -44,5 +59,12 @@ class LinkMessageReceive(threading.Thread):
         return from_node, to_node, expiration
 
     def update_graph(self, from_node, to_node, expiration):
+        '''
+        Updates the OverlayGraph with new links.
+        :param from_node:  the node where the data is received from
+        :param to_node:    the node where
+        :param expiration: the expiration time of the link
+        :return:
+        '''
         #self.OVERLAY_GRAPH[from_node].append(to_node)
         OverlayGraph.create_link(from_node, to_node, expiration)

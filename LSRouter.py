@@ -15,6 +15,7 @@ class LSRouter:
     forward_echo_socket = ''
     broadcast_socket = ''
 
+    #creates an instance of the Overlay Graph class
     OVERLAY_GRAPH = OverlayGraph.OVERLAY_GRAPH
     #spoof graph
     '''
@@ -30,9 +31,7 @@ class LSRouter:
     OverlayGraph.create_link('bbreyel', 'cannan', 9000000000000)
     '''
 
-
-
-
+    #maps student nodes to their ports
     NODE_PORT_MAP = {'student0' : [20020,   20021],
                     'kbadams'   : [21020,   21021],
                     'jadolphe'  : [21120,   21121],
@@ -102,23 +101,16 @@ class LSRouter:
 
         self.broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
-    def initialize_link_table(self):
-        """
-        Initialize the link table.
-        :return:
-        """
-        pass
-
 
     def run(self):
-        '''run the listeners to handle concurrent sending/receiving of messages'''
+        '''Runs the listeners to handle concurrent sending/receiving of messages.  It also runs
+        the OverlayGraphMonitor, which is responsible for deleting dead links from the Overlay
+        Graph.'''
         print('Running router...')
 
 
         LMListener = LinkStateListener.LinkStateListener(self.LM_receive_socket, self.OVERLAY_GRAPH)
         LMListener.start()
-        #might not even need this method
-        #self.updateGraph(LMListener.OVERLAY_GRAPH)
 
         overlay_graph_monitor = OverlayGraphMonitor.OverlayGraphMonitor()
         overlay_graph_monitor.start()
@@ -138,10 +130,6 @@ class LSRouter:
         self.LM_receive_socket.close()
         self.forward_echo_socket.close()
 
-    def updateGraph(self, thread_overlay_graph ):
-        '''updates the Graph according to the latest link state message'''
-        self.OVERLAY_GRAPH = thread_overlay_graph
-        print(self.OVERLAY_GRAPH)
 
 def Main():
     a = LSRouter()

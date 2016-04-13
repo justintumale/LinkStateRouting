@@ -3,17 +3,27 @@ import ForwardEchoThread
 import socket
 
 class ForwardEchoListener(threading.Thread):
+    '''
+    A class that listens for incoming echo/forward messages.
+    '''
     forward_echo_socket = ''
     LINKS = []
     NODE_PORT_MAP = {}
 
     def __init__(self, socket, LINKS, NODE_PORT_MAP):
+        '''
+        Initialize the socket, our node's current links, and the node port map.
+        '''
         threading.Thread.__init__(self)
         self.forward_echo_socket = socket
         self.LINKS = LINKS
         self.NODE_PORT_MAP = NODE_PORT_MAP
 
     def run(self):
+        '''
+        Listen for incoming echo/forward messages.
+        :return:
+        '''
         print('Running Forward Echo Listener...')
         while True:
             try:

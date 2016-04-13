@@ -3,6 +3,9 @@ import OverlayGraph
 import time
 
 class OverlayGraphMonitor(threading.Thread):
+    '''
+    Monitor the OverlayGraph and delete expired links.
+    '''
     def __init__(self):
         threading.Thread.__init__(self)
 

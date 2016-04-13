@@ -71,6 +71,9 @@ OVERLAY_GRAPH = {'student0' : [],
 
 
 def create_link(from_node, to_node, expiration):
+    '''
+    Create a link between two nodes.
+    '''
     global OVERLAY_GRAPH
     if len(OVERLAY_GRAPH[from_node]) == 0:
         link = LiveNode(to_node, expiration)

@@ -37,27 +37,51 @@ priority_queue = queue.PriorityQueue(60)
 visited_set = []
 
 def initialize_weights(overlay_graph, node_weight_map, root):
+    '''
+    Initialize the weights on the node_weight_map to infinity except for
+    the root.
+    :param overlay_graph: the overlay graph
+    :param node_weight_map: the hashmap that maps nodes to their weights
+    :param root:    the root node
+    :return:
+    '''
     node_weight_map[root] = root
-    #infinity = math.inf
-    infinity = 9999 #infinity not working on the Vm
+    #infinity = math.inf <---- does not work on vm420
+    infinity = 9999
     visited_set.append(root)
-    for key in overlay_graph:
+    for key in overlay_graph:   #append the key to the list of all nodes
         every_node.append(key)
-        if key == root:
+        if key == root:         #if the key is the root, set its weight to 0
             node_weight_map[key] = 0
         else:
-            node_weight_map[key] = infinity
+            node_weight_map[key] = infinity #if not the root, set to infinity
             not_visited.append(key)
 
 
 def check_if_neighbors(overlay_graph, root, branch):
+    '''
+    Check if two nodes are neighbors
+    :param overlay_graph: the overlay graph
+    :param root:    the root node
+    :param branch:  the node to check if its a neighbor of the root
+    :return:    True if the two nodes are neighbors
+    '''
     for link in overlay_graph[root]:
+        #if the link connected to the root in the graph is equal to the branch
+        #then return true
         if link.name == branch:
             return True
     return False
 
 
 def find_not_visited_neighbors(overlay_graph, node, not_visited):
+    '''
+
+    :param overlay_graph: the overlay graph
+    :param node: the current node who's neighbors were checing for
+    :param not_visited: the list of unvisited nodes
+    :return:
+    '''
     neighbors = []
     for key in not_visited:
         if check_if_neighbors(overlay_graph, node, key):
@@ -67,6 +91,13 @@ def find_not_visited_neighbors(overlay_graph, node, not_visited):
     return neighbors
 
 def relax_neighbors(node, overlay_graph):
+    '''
+    If the sum of weight of the current node and the path to get to the neighbor
+    is less than the neighbor's current weight, then change the neighbor's
+    current weight to the sum.
+    :param node:    the current node
+    :param overlay_graph:   the overlay graph
+    '''
     neighbors = find_not_visited_neighbors(overlay_graph, node, not_visited)
     #neighbors = find_neighbors(overlay_graph, node)
     for neighbor in neighbors:
@@ -77,6 +108,18 @@ def relax_neighbors(node, overlay_graph):
 
 
 def find_shortest_path(node_parent_map, root, destination, splist):
+    '''
+    After Dijkstra's algorithm creates the graph that contains the shortest
+    path from the root to all nodes, this algorithm will find the shortest
+    path from the destination node back to the root node.
+
+    :param node_parent_map: the hashmap that maps nodes to their parent node according to
+        the shortest paths from the root
+    :param root: the root node
+    :param destination: the destination node
+    :param splist: the list that will contain the shortest path
+    :return:
+    '''
     if destination == root:
         splist.append(root)
         #print('this is the unreturned path', a)
@@ -88,6 +131,14 @@ def find_shortest_path(node_parent_map, root, destination, splist):
 
 
 def dijkstras(root, destination, overlay_graph ):
+    '''
+    Dijkstra's algorithm that finds the shortest path from the root node
+    to a destination node.
+    :param root: the root node
+    :param destination: the destination node
+    :param overlay_graph: the overlay graph
+    :return: the shortest path from the root to the destination
+    '''
     #1 start at root
     #2 push node to visited
     #3 find node's neighbors
@@ -106,20 +157,20 @@ def dijkstras(root, destination, overlay_graph ):
             print('breaking')
             path_available = False
             break
-        node = priority_queue.get()[1]
+        node = priority_queue.get()[1]          #set the current node as the first item in the queue
         #push node to visited
-        visited_set.append(node)
+        visited_set.append(node)                #add the node to the visited list
         #remove node from not_visited list
         if node in not_visited:
-            not_visited.remove(node)
-        #relax neighbors & push them to priority queue
-        relax_neighbors(node, overlay_graph)
-        if destination in visited_set: break
+            not_visited.remove(node)            #remove the node from the not-visited list
+        relax_neighbors(node, overlay_graph)    #relax neighbors & push them to priority queue
+        if destination in visited_set:          #if the destination is in the visited set, exit
+            break
 
     if path_available:
         list = []
         shortest_path = find_shortest_path(node_parent_map, root, destination, list)
-        shortest_path.reverse()
+        shortest_path.reverse()  #find_shortest_path returns a list from destination --> root, so reverse
         return(shortest_path)
     else:
         return
