@@ -76,6 +76,7 @@ class ForwardEchoThread(threading.Thread):
                 #FORWARD FROM ROUTER TO CLIENT
                 forward_message = echomessage.EchoMessage(from_node, to_node, msg)
                 forward_message = json.dumps(forward_message.__dict__)
+                print(forward_message)
 
                 self.socket.sendto(forward_message.encode('utf-8'), ('127.0.0.1', 5002))
                 #print('receive Address', self.receiveAddress)
@@ -110,6 +111,7 @@ class ForwardEchoThread(threading.Thread):
 
                     forward_message = echomessage.EchoMessage('fjt14188', from_node, error_message)
                     forward_message = json.dumps(forward_message.__dict__)
+                    print(forward_message)
 
 
                     destination_node = self.NODE_PORT_MAP[from_node]
@@ -136,6 +138,7 @@ class ForwardEchoThread(threading.Thread):
 
                     forward_message = echomessage.EchoMessage(from_node, to_node, msg)
                     forward_message = json.dumps(forward_message.__dict__)
+                    print(forward_message)
 
                     self.socket.sendto(forward_message.encode('utf-8'), ("127.0.0.1", destination_address))
 

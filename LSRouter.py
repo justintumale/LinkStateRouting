@@ -81,10 +81,12 @@ class LSRouter:
                     'byang9'	: [25520,	25521],
                     'dilawarz'	: [25620,	25621]}
 
-    LINKS = ['kamercer', 'trsturbo', 'mwong9']
+    #create the links to connect to
+    LINKS = ['kamercer', 'trsturbo', 'mwong9', 'ahiggins']
     OverlayGraph.create_link('fjt14188', 'kamercer', int(time.time())+120 )
     OverlayGraph.create_link('fjt14188', 'mwong9', int(time.time())+120 )
     OverlayGraph.create_link('fjt14188', 'trsturbo', int(time.time())+120 )
+    OverlayGraph.create_link('fjt14188', 'ahiggins', int(time.time())+120 )
 
 
 
